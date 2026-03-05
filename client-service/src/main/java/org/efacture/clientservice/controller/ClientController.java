@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/clients")
 @RequiredArgsConstructor
@@ -20,5 +22,11 @@ public class ClientController {
     public ResponseEntity<ClientResponse> createClient(@Valid @RequestBody CreateClientRequest request) {
         ClientResponse response = clientService.createClient(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClientResponse>> getAllClients() {
+        List<ClientResponse> clients = clientService.getAllClients();
+        return ResponseEntity.ok(clients);
     }
 }

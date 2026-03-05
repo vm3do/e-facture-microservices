@@ -11,6 +11,8 @@ import org.efacture.clientservice.service.ClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -30,5 +32,13 @@ public class ClientServiceImpl implements ClientService {
         Client savedClient = clientRepository.save(client);
 
         return clientMapper.toResponse(savedClient);
+    }
+
+    @Override
+    public List<ClientResponse> getAllClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(clientMapper::toResponse)
+                .toList();
     }
 }
