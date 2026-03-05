@@ -29,4 +29,10 @@ public class ClientController {
         List<ClientResponse> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClientResponse> getClientById(@PathVariable Long id) {
+        ClientResponse client = clientService.getClientById(id);
+        return ResponseEntity.ok(client);
+    }
 }

@@ -9,4 +9,5 @@ public interface ClientService {
 
     ClientResponse createClient(CreateClientRequest request);
     List<ClientResponse> getAllClients();
+    ClientResponse getClientById(Long id);
 }
