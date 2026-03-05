@@ -5,6 +5,7 @@ import org.efacture.clientservice.dto.ClientResponse;
 import org.efacture.clientservice.dto.CreateClientRequest;
 import org.efacture.clientservice.entity.Client;
 import org.efacture.clientservice.exception.ClientAlreadyExistsException;
+import org.efacture.clientservice.exception.NotFoundRessourceException;
 import org.efacture.clientservice.mapper.ClientMapper;
 import org.efacture.clientservice.repository.ClientRepository;
 import org.efacture.clientservice.service.ClientService;
@@ -40,5 +41,13 @@ public class ClientServiceImpl implements ClientService {
                 .stream()
                 .map(clientMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public ClientResponse getClientById(Long id) {
+            Client client = clientRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundRessourceException("Client not found with id: " + id));
+
+        return clientMapper.toResponse(client);
     }
 }
