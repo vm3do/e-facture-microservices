@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -24,6 +26,21 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         
         return productMapper.toResponse(savedProduct);
+    }
+    
+    @Override
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll()
+            .stream()
+            .map(productMapper::toResponse)
+            .toList();
+    }
+    
+    @Override
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("Produit avec l'ID " + id + " introuvable"));
+        return productMapper.toResponse(product);
     }
     
     @Override
