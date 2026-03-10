@@ -1,13 +1,9 @@
 spring:
   application:
-    name: produit-service
-
+    name: client-service
   config:
     import: configserver:http://localhost:8888
-
 server:
-  port: 8082
-
-
+  port: 8081
 
 
