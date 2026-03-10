@@ -50,4 +50,12 @@ public class ClientServiceImpl implements ClientService {
 
         return clientMapper.toResponse(client);
     }
+
+    @Override
+    @Transactional
+    public void deleteClient(Long id){
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundRessourceException("Client not found"));
+        clientRepository.deleteById(id);
+    }
 }
