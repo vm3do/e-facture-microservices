@@ -9,8 +9,8 @@
         <option value="$PROJECT_DIR$/client-service/pom.xml" />
         <option value="$PROJECT_DIR$/produit_service/pom.xml" />
         <option value="$PROJECT_DIR$/config-service/pom.xml" />
-        <option value="$PROJECT_DIR$/../../all project java Youcode/e-facture-microservices/discovery-service/pom.xml" />
         <option value="$PROJECT_DIR$/gateway-service/pom.xml" />
+        <option value="$PROJECT_DIR$/test-service/pom.xml" />
       </list>
     </option>
   </component>
