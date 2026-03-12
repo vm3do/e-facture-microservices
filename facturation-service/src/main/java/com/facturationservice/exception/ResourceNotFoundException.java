@@ -1,0 +1,8 @@
+package com.facturationservice.exception;
+
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+
