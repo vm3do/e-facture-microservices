@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: produit-service
+
+  config:
+    import: configserver:http://localhost:9999
+
+server:
+  port: 8082
+
+
+
+
