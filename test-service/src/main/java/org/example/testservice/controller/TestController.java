@@ -1,6 +1,5 @@
 package org.example.testservice.controller;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.example.testservice.dto.ProductResponse;
 import org.example.testservice.service.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +27,3 @@ public class TestController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 }
-

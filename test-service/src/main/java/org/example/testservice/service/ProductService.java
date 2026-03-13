@@ -1,7 +1,6 @@
 package org.example.testservice.service;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.example.testservice.client.ProductClient;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.example.testservice.dto.ProductResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,24 +13,26 @@ import java.util.List;
 public class ProductService {
 
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
-    private final ProductClient productClient;
 
-    public ProductService(ProductClient productClient) {
-        this.productClient = productClient;
+    private final ProductCircuitBreakerService circuitBreakerService;
+
+    public ProductService(ProductCircuitBreakerService circuitBreakerService) {
+        this.circuitBreakerService = circuitBreakerService;
     }
 
-    @CircuitBreaker(name = "produit-service", fallbackMethod = "getAllProductsFallback")
+    @Retry(name = "produit-service", fallbackMethod = "getAllProductsFallback")
     public List<ProductResponse> getAllProducts() {
-        return productClient.getAllProducts();
+        return circuitBreakerService.getAllProducts();
     }
 
-    @CircuitBreaker(name = "produit-service", fallbackMethod = "getProductByIdFallback")
+    @Retry(name = "produit-service", fallbackMethod = "getProductByIdFallback")
     public ProductResponse getProductById(Long id) {
-        return productClient.getProductById(id);
+        return circuitBreakerService.getProductById(id);
     }
+
 
     public List<ProductResponse> getAllProductsFallback(Throwable t) {
-        log.error("[CIRCUIT BREAKER] getAllProducts fallback. Cause: {}", t.getMessage());
+        log.error("[FALLBACK] getAllProducts — 3 tentatives epuisees. Cause: {}", t.getMessage());
         return Collections.singletonList(
                 ProductResponse.builder()
                         .id(-1L)
@@ -44,7 +45,7 @@ public class ProductService {
     }
 
     public ProductResponse getProductByIdFallback(Long id, Throwable t) {
-        log.error("[CIRCUIT BREAKER] getProductById({}) fallback. Cause: {}", id, t.getMessage());
+        log.error("[FALLBACK] getProductById({}) — 3 tentatives epuisees. Cause: {}", id, t.getMessage());
         return ProductResponse.builder()
                 .id(id)
                 .name("Service Produit Indisponible")
@@ -54,4 +55,3 @@ public class ProductService {
                 .build();
     }
 }
-
