@@ -26,7 +26,6 @@ public class ResilienceConfig {
     @PostConstruct
     public void registerEventListeners() {
 
-        // ─── Retry Event Listeners ────────────────────────────────────────────
         retryRegistry.retry("produit-service").getEventPublisher()
 
             .onRetry(event ->
@@ -47,7 +46,6 @@ public class ResilienceConfig {
                         ? event.getLastThrowable().getMessage()
                         : "unknown"));
 
-        // ─── Circuit Breaker Event Listeners ─────────────────────────────────
         circuitBreakerRegistry.circuitBreaker("produit-service").getEventPublisher()
 
             .onStateTransition(event -> {
