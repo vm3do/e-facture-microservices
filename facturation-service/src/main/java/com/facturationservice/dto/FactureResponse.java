@@ -18,6 +18,5 @@ public class FactureResponse {
     private LocalDate billingDate;
     private Long clientId;
     private List<LigneFactureResponse> lignes;
-    private double totalAmount;
 }
 

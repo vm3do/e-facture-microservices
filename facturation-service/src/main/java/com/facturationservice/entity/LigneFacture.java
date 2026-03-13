@@ -22,7 +22,6 @@ public class LigneFacture {
     @Column(nullable = false)
     private String productName;
 
-    /** Prix capturé au moment de la création de la facture */
     @Column(nullable = false)
     private double unitPrice;
 

@@ -4,8 +4,8 @@ import com.facturationservice.dto.*;
 import com.facturationservice.entity.Facture;
 import com.facturationservice.entity.LigneFacture;
 import com.facturationservice.exception.FactureNotFoundException;
-import com.facturationservice.feign.ClientFeign;
-import com.facturationservice.feign.ProductFeign;
+import com.facturationservice.service.ClientService;
+import com.facturationservice.service.ProductService;
 import com.facturationservice.mapper.FactureMapper;
 import com.facturationservice.repository.FactureRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 public class FactureServiceImpl implements FactureService {
 
     private final FactureRepository factureRepository;
-    private final ClientFeign clientFeign;
-    private final ProductFeign productFeign;
+    private final ClientService clientService;
+    private final ProductService productService;
     private final FactureMapper factureMapper;
 
     @Override
@@ -31,7 +31,7 @@ public class FactureServiceImpl implements FactureService {
     public FactureResponse createFacture(CreateFactureRequest request) {
 
         // 1. Vérifier que le client existe (Feign lève FeignException.NotFound → 404)
-        clientFeign.getClientById(request.getClientId());
+        clientService.getClientById(request.getClientId());
 
         // 2. Construire la facture
         Facture facture = Facture.builder()
@@ -45,7 +45,7 @@ public class FactureServiceImpl implements FactureService {
         for (LigneFactureRequest ligneRequest : request.getLignes()) {
 
             // Feign lève FeignException.NotFound si le produit n'existe pas
-            ProductDTO product = productFeign.getProductById(ligneRequest.getProductId());
+            ProductDTO product = productService.getProductById(ligneRequest.getProductId());
 
             LigneFacture ligne = LigneFacture.builder()
                     .productId(product.getId())
@@ -70,11 +70,11 @@ public class FactureServiceImpl implements FactureService {
         Facture facture = factureRepository.findById(id)
                 .orElseThrow(() -> new FactureNotFoundException("Facture non trouvée avec l'ID : " + id));
 
-        ClientDTO client = clientFeign.getClientById(facture.getClientId());
+        ClientDTO client = clientService.getClientById(facture.getClientId());
 
         List<LigneFactureEnrichedResponse> lignesEnriched = facture.getLignes().stream()
                 .map(ligne -> {
-                    ProductDTO product = productFeign.getProductById(ligne.getProductId());
+                    ProductDTO product = productService.getProductById(ligne.getProductId());
                     return LigneFactureEnrichedResponse.builder()
                             .id(ligne.getId())
                             .product(product)
