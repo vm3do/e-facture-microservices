@@ -7,12 +7,24 @@ spring:
             - id: r1
               uri: lb://CLIENT-SERVICE
               predicates:
-                - Path= /api/clients/**
+                - Path=/api/clients/**
+              filters:
+                - name: RateLimiterGatewayFilter
+                  args:
+                    name: clients
             - id: r2
               uri: lb://PRODUIT-SERVICE
               predicates:
-                - Path= /api/produits/**
+                - Path=/api/produits/**
+              filters:
+                - name: RateLimiterGatewayFilter
+                  args:
+                    name: produits
             - id: r3
               uri: lb://FACTURATION-SERVICE
               predicates:
-                  - Path= /api/factures/**
+                - Path=/api/factures/**
+              filters:
+                - name: RateLimiterGatewayFilter
+                  args:
+                    name: factures
