@@ -16,6 +16,5 @@ public class LigneFactureResponse {
     private String productName;
     private double unitPrice;
     private int quantity;
-    private double totalLine;
 }
 
